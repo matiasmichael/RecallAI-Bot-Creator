@@ -8,7 +8,7 @@
 
 **Create AI meeting bots with animated avatars for Zoom, Microsoft Teams, and Google Meet**
 
-[Features](#-features) • [Quick Start](#-quick-start) • [Installation](#-installation) • [Usage](#-usage) • [Configuration](#%EF%B8%8F-configuration)
+[Features](#-features) • [Quick Start](#-quick-start) • [Installation](#-installation) • [Usage](#-usage) • [Creating Custom Assets](#-creating-custom-animated-assets-for-demo-calls) • [Configuration](#%EF%B8%8F-configuration)
 
 </div>
 
@@ -169,6 +169,125 @@ For best results, your GIF should:
 |-----|-------------|----------|
 | `robinhood.gif` | Animated blue/green orb with Robinhood branding | Fintech, Modern SaaS |
 | `deel.gif` | Professional animated avatar | HR Tech, Enterprise |
+
+---
+
+## 🎬 Creating Custom Animated Assets for Demo Calls
+
+Before client demos, create a personalized animated bot avatar that matches their brand. This section explains the end-to-end process.
+
+### Overview
+
+We create high-end, cinematic animated assets with a premium "Dark Mode" aesthetic:
+- **Central Element**: A 3D sphere with organic "liquid silk" texture
+- **Background**: Deep charcoal or brand-specific dark gradient
+- **Branding**: Client logo placed cleanly in a corner
+
+### Step 1: Create the Static Base Image
+
+Use **[Nano Banana Pro](https://chatgpt.com/g/g-67ba9d9b0bfc81919e1bbd1c42b4d8a7-nano-banana-pro)** (or similar high-fidelity image generator) to create the starting frame.
+
+#### Image Generation Prompt Template
+
+```
+A high-end, cinematic static graphic for a bot. Central large 3D sphere 
+with a smooth, viscous liquid silk texture in [BRAND COLORS]. Deep charcoal 
+black background. The [BRAND NAME] logo is placed cleanly in the top-left 
+corner. Minimalist, premium tech aesthetic matching a dark mode interface. 
+16:9 aspect ratio.
+```
+
+#### Example Prompts
+
+**For Robinhood:**
+```
+A high-end, cinematic static graphic for a bot. Central large 3D sphere 
+with a smooth, viscous liquid silk texture in vibrant green and teal. 
+Deep charcoal black background. The Robinhood logo is placed cleanly 
+in the top-left corner. Minimalist, premium tech aesthetic matching 
+a dark mode interface. 16:9 aspect ratio.
+```
+
+**For Deel:**
+```
+A high-end, cinematic static graphic for a bot. Central large 3D sphere 
+with a smooth, viscous liquid silk texture in blue and purple gradients. 
+Deep charcoal black background. The Deel logo is placed cleanly in the 
+top-left corner. Minimalist, premium tech aesthetic matching a dark mode 
+interface. 16:9 aspect ratio.
+```
+
+### Step 2: Animate with Kling AI
+
+Transform the static image into a smooth, "breathing" animation using **[Kling AI](https://klingai.com/)**.
+
+#### Animation Prompt Template
+
+```
+The central sphere in the image comes to life with a slow, cinematic 
+liquid motion. The internal textures swirl smoothly like viscous 
+[COLOR 1] and [COLOR 2] fluid, resembling flowing silk or liquid marble. 
+Add subtle, shifting light reflections across the surface of the sphere 
+to give it realistic 3D depth. The dark background and the [BRAND NAME] 
+logo remain perfectly static, while the sphere pulses with a gentle, 
+'alive' energy. Ensure the motion is perfectly seamless for a continuous 
+infinite loop.
+```
+
+#### Kling AI Settings
+
+| Setting | Value | Why |
+|---------|-------|-----|
+| **Model** | VIDEO 2.6 | Superior motion control and realism |
+| **Mode** | Professional Mode | High stability for slow movements |
+| **Duration** | 10 seconds | Allows for viscous, calming liquid motion |
+
+#### 🔑 The "End Frame" Trick (MANDATORY)
+
+To ensure a **perfect loop**:
+
+1. Upload your static image as the **start frame**
+2. Upload the **exact same image** into the **"Add an end frame"** slot
+3. This forces the AI to conclude the animation exactly where it began
+
+### Step 3: Post-Processing
+
+#### Verify the Loop
+- Preview the video to ensure no "jump" or flicker at the transition point
+- The animation should flow seamlessly in an infinite loop
+
+#### Convert to GIF (if needed)
+1. Go to [EzGIF.com](https://ezgif.com/video-to-gif)
+2. Upload your MP4 from Kling
+3. Settings:
+   - Frame rate: 15-20 fps (balances quality vs file size)
+   - Size: Keep original or scale to 1280x720
+4. **Important**: Select "Infinite Loop" option
+5. Download and save to `assets/gifs/[company_name].gif`
+
+### Step 4: Add to Repository
+
+```bash
+# Copy your new GIF to the assets folder
+cp ~/Downloads/[company_name].gif assets/gifs/
+
+# Add and commit
+git add assets/gifs/[company_name].gif
+git commit -m "Add [Company Name] animated bot avatar"
+git push
+```
+
+### Quick Reference Card
+
+| Step | Tool | Time |
+|------|------|------|
+| 1. Generate static image | Nano Banana Pro | ~2 min |
+| 2. Animate with Kling | Kling AI (VIDEO 2.6) | ~5 min |
+| 3. Convert to GIF | EzGIF | ~1 min |
+| 4. Test in meeting | This repo | ~2 min |
+| **Total** | | **~10 min** |
+
+---
 
 ## 🔧 Troubleshooting
 
