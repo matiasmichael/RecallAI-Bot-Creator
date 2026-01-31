@@ -34,7 +34,7 @@ DEFAULT_BOT_NAME = "Clarity's Security Agent"
 LOCAL_SERVER_PORT = 8765
 
 # Default GIF file path (can be overridden)
-DEFAULT_GIF_PATH = Path(__file__).parent / "bot_avatar.gif"
+DEFAULT_GIF_PATH = Path(__file__).parent.parent / "assets" / "gifs" / "robinhood.gif"
 
 
 def create_html_page(gif_base64: str) -> str:

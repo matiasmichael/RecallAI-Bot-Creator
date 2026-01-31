@@ -35,6 +35,7 @@ env/
 .vscode/
 *.swp
 *.swo
+*.pyc
 
 # OS
 .DS_Store
@@ -42,3 +43,7 @@ Thumbs.db
 
 # ngrok
 ngrok.log
+
+# Temporary files
+*.tmp
+*.bak
