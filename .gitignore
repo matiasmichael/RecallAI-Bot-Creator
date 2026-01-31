@@ -40,8 +40,5 @@ env/
 .DS_Store
 Thumbs.db
 
-# GIF files (user-specific)
-*.gif
-
 # ngrok
 ngrok.log
