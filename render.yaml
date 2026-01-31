@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: clarity-bot-launcher
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn src.web_app_cloud:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: RECALL_API_KEY
+        sync: false
+      - key: PYTHON_VERSION
+        value: "3.11"

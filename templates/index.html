@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clarity Bot Launcher</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg: #0f172a;
+            --bg-card: #1e293b;
+            --bg-input: #334155;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #475569;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        input[type="text"],
+        input[type="url"],
+        select {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            background: var(--bg-input);
+            color: var(--text);
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .gif-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .gif-option {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .gif-option input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .gif-option label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .gif-option label:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .gif-option input:checked + label {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .gif-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 0.5rem;
+            border: 2px solid var(--border);
+        }
+
+        .gif-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .status {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .status.success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid var(--success);
+            display: block;
+        }
+
+        .status.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--danger);
+            display: block;
+        }
+
+        .status.loading {
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid var(--primary);
+            display: block;
+        }
+
+        .active-bots {
+            margin-top: 1rem;
+        }
+
+        .bot-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--bg-input);
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .bot-info {
+            flex: 1;
+        }
+
+        .bot-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .bot-meeting {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            word-break: break-all;
+        }
+
+        .bot-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            margin-top: 0.25rem;
+        }
+
+        .pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 2rem;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="logo">🤖 Clarity Bot Launcher</h1>
+            <p class="tagline">Deploy animated bots to your meetings in seconds</p>
+        </header>
+
+        <div class="card">
+            <h2>🚀 Launch a Bot</h2>
+            <form id="bot-form">
+                <div class="form-group">
+                    <label for="meeting-url">Meeting URL</label>
+                    <input 
+                        type="url" 
+                        id="meeting-url" 
+                        name="meeting_url" 
+                        placeholder="Paste your Zoom, Teams, or Google Meet link..."
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Select Company Animation</label>
+                    <div class="gif-grid" id="gif-grid">
+                        {% for gif in gifs %}
+                        <div class="gif-option">
+                            <input type="radio" name="gif" id="gif-{{ gif.filename }}" value="{{ gif.filename }}" {% if loop.first %}checked{% endif %}>
+                            <label for="gif-{{ gif.filename }}">
+                                <img src="/static/gifs/{{ gif.filename }}" alt="{{ gif.display_name }}" class="gif-preview">
+                                <span class="gif-name">{{ gif.display_name }}</span>
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="bot-name">Bot Name (optional)</label>
+                    <input 
+                        type="text" 
+                        id="bot-name" 
+                        name="bot_name" 
+                        placeholder="Clarity's Security Agent"
+                    >
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="submit-btn">
+                    <span id="btn-text">🎉 Launch Bot</span>
+                </button>
+
+                <div class="status" id="status"></div>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>📡 Active Bots</h2>
+            <div class="active-bots" id="active-bots">
+                <div class="empty-state">No active bots</div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Built with ❤️ by Clarity • Powered by RecallAI</p>
+        </footer>
+    </div>
+
+    <script>
+        const form = document.getElementById('bot-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const btnText = document.getElementById('btn-text');
+        const statusDiv = document.getElementById('status');
+        const activeBots = document.getElementById('active-bots');
+
+        // Load active bots on page load
+        loadActiveBots();
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const meetingUrl = document.getElementById('meeting-url').value;
+            const gifFilename = document.querySelector('input[name="gif"]:checked')?.value;
+            const botName = document.getElementById('bot-name').value || "Clarity's Security Agent";
+            
+            if (!meetingUrl || !gifFilename) {
+                showStatus('Please fill in all required fields', 'error');
+                return;
+            }
+
+            // Show loading state
+            submitBtn.disabled = true;
+            btnText.innerHTML = '<span class="spinner"></span> Launching...';
+            showStatus('Creating bot and connecting to meeting...', 'loading');
+
+            try {
+                const response = await fetch('/api/create-bot', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        meeting_url: meetingUrl,
+                        gif_filename: gifFilename,
+                        bot_name: botName
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showStatus(`✅ Bot launched successfully! Bot ID: ${data.bot_id}`, 'success');
+                    document.getElementById('meeting-url').value = '';
+                    loadActiveBots();
+                } else {
+                    showStatus(`❌ Error: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                showStatus(`❌ Error: ${error.message}`, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                btnText.textContent = '🎉 Launch Bot';
+            }
+        });
+
+        async function loadActiveBots() {
+            try {
+                const response = await fetch('/api/active-bots');
+                const bots = await response.json();
+
+                if (bots.length === 0) {
+                    activeBots.innerHTML = '<div class="empty-state">No active bots</div>';
+                } else {
+                    activeBots.innerHTML = bots.map(bot => `
+                        <div class="bot-item">
+                            <div class="bot-info">
+                                <div class="bot-name">${bot.bot_name}</div>
+                                <div class="bot-meeting">${truncate(bot.meeting_url, 50)}</div>
+                                <div class="bot-status"><span class="pulse"></span> Active</div>
+                            </div>
+                            <button class="btn btn-danger" onclick="stopBot('${bot.bot_id}')">Stop</button>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading bots:', error);
+            }
+        }
+
+        async function stopBot(botId) {
+            if (!confirm('Are you sure you want to stop this bot?')) return;
+
+            try {
+                const response = await fetch(`/api/stop-bot/${botId}`, { method: 'POST' });
+                if (response.ok) {
+                    loadActiveBots();
+                }
+            } catch (error) {
+                console.error('Error stopping bot:', error);
+            }
+        }
+
+        function showStatus(message, type) {
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+        }
+
+        function truncate(str, length) {
+            return str.length > length ? str.substring(0, length) + '...' : str;
+        }
+
+        // Refresh active bots every 30 seconds
+        setInterval(loadActiveBots, 30000);
+    </script>
+</body>
+</html>

@@ -1,2 +1,4 @@
 httpx>=0.24.0
 pyngrok>=7.0.0
+flask>=3.0.0
+gunicorn>=21.0.0
